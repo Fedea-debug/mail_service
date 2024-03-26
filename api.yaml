@@ -1,0 +1,211 @@
+openapi: 3.0.0
+paths:
+  /public/auth/login:
+    post:
+      operationId: AuthController_login
+      summary: Login with email, password, and optional captcha
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBodyDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessTokenResponseDto"
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenDto"
+      tags: &a1
+        - /auth endpoint
+  /public/register:
+    post:
+      operationId: AuthController_register
+      summary: Register a new user
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterBodyDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponseDto"
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenDto"
+      tags: *a1
+  /public/activate-email:
+    post:
+      operationId: AuthController_activateEmail
+      summary: Activate user email after registration
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivateUserBodyDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponseDto"
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenDto"
+      tags: *a1
+info:
+  title: CRM Documentation
+  description: API description
+  version: "1.0"
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    JWT-Auth:
+      type: http
+      scheme: bearer
+      name: BearerAuth
+      in: header
+      bearerFormat: JWT
+      description: Jwt token
+  schemas:
+    LoginBodyDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: boseadeli6@gmail.com
+        password:
+          type: string
+          description: User pasword
+          example: admin
+      required:
+        - email
+        - password
+    AccessTokenResponseDto:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: Access token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW4iLCJ0eXBlIjoiMDcwNzFjYmM4NTMyNzZmMCIsImlhdCI6MTcwODk0NTc3MiwiZXhwIjoxNzA4OTQ5MzcyfQ.fIZULxmk6zXXbxrVvr4NiDy-U7E7V-qJL65qvL_IO_g
+        ttl:
+          type: number
+          description: Access token time to live
+          example: 3600
+      required:
+        - access_token
+        - ttl
+    BadRequestDto:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Exception message
+          example: All fields are required
+        code:
+          type: string
+          description: Exception code
+          example: bad_request
+        errors:
+          description: Errors Array
+          example:
+            - field: first_name
+              code: required
+              message: First name is required
+          type: array
+          items:
+            type: string
+      required:
+        - message
+        - code
+        - errors
+    ForbiddenDto:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Exception message
+          example: Too many atempts
+        code:
+          type: string
+          description: Exception code
+          example: forbidden_error
+      required:
+        - message
+        - code
+    RegisterBodyDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+          example: boseadeli6@gmail.com
+        password:
+          type: string
+          description: User pasword
+          example: admin
+      required:
+        - email
+        - password
+    SuccessResponseDto:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Success operation status
+          example: true
+      required:
+        - success
+    ActivateUserBodyDto:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Activation code
+          example: b03890edba67ac65177138d49dd8293ba71ad43d
+      required:
+        - code
