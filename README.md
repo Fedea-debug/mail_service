@@ -32,6 +32,11 @@
 $ npm install
 ```
 
+## Run migrations
+`$ npm run typeorm:migrate`
+## Revert migrations
+`$ npm run typeorm:revert`
+
 ## Running the app
 
 ```bash
