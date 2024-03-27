@@ -94,6 +94,161 @@ paths:
               schema:
                 $ref: "#/components/schemas/ForbiddenDto"
       tags: *a1
+  /public/email:
+    post:
+      operationId: EmailsController_createEmail
+      summary: Create an email
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEmailBodyDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponseDto"
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestDto"
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenDto"
+      security:
+        - JWT-Auth: []
+  /public/emails:
+    get:
+      operationId: EmailsController_getEmails
+      summary: Get emails
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CreateEmailBodyDto"
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestDto"
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenDto"
+      security:
+        - JWT-Auth: []
+  /public/email/{id}:
+    put:
+      operationId: EmailsController_updateEmail
+      summary: Update an email
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Email id
+          example: 12
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEmailBodyDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponseDto"
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestDto"
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenDto"
+      security:
+        - JWT-Auth: []
+    delete:
+      operationId: EmailsController_deleteEmail
+      summary: Delete an email
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Email id
+          example: 12
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponseDto"
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestDto"
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenDto"
+      security:
+        - JWT-Auth: []
 info:
   title: CRM Documentation
   description: API description
@@ -209,3 +364,50 @@ components:
           example: b03890edba67ac65177138d49dd8293ba71ad43d
       required:
         - code
+    CreateEmailBodyDto:
+      type: object
+      properties:
+        receiver_email:
+          type: string
+          description: Receiver email
+          example: example@gmail.com
+        subject:
+          type: string
+          description: Email subject
+          example: Activate your email
+        body:
+          type: string
+          description: Email body
+          example: Dear customer ...
+      required:
+        - receiver_email
+        - subject
+        - body
+    UnauthorizedDto:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Exception code
+          example: unauthorized
+        message:
+          type: string
+          description: Exception message
+          example: User is not authorized
+      required:
+        - code
+        - message
+    UpdateEmailBodyDto:
+      type: object
+      properties:
+        subject:
+          type: string
+          description: Email subject
+          example: Activate your email
+        body:
+          type: string
+          description: Email body
+          example: Dear customer ...
+      required:
+        - subject
+        - body
